@@ -17,7 +17,7 @@ import java.util.UUID;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id = UUID.randomUUID();;
+    private final UUID id = UUID.randomUUID();
     private String name;
     private String description;
 }
