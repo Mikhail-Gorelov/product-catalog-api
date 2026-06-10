@@ -15,7 +15,7 @@ import java.util.UUID;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id = UUID.randomUUID();
+    private final UUID id = UUID.randomUUID();
     private String name;
     private String description;
     private Double price;
@@ -25,5 +25,6 @@ public class Product {
     @ManyToOne(optional = false)
     private Category category;
     private LocalDate dateAdded;
+    @Builder.Default
     private boolean active = Boolean.FALSE;
 }
