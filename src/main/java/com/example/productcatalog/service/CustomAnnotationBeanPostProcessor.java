@@ -19,6 +19,14 @@ public class CustomAnnotationBeanPostProcessor implements BeanPostProcessor {
     }
 
     @Override
+    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+        if (beansMap.containsKey(beanName)) {
+            log.info("last part init root service");
+        }
+        return bean;
+    }
+
+    @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if (bean.getClass().isAnnotationPresent(CustomAnnotation.class)) {
             beansMap.put(beanName, bean);
@@ -26,11 +34,4 @@ public class CustomAnnotationBeanPostProcessor implements BeanPostProcessor {
         return bean;
     }
 
-    @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        if (beansMap.containsKey(beanName)) {
-            log.info("last part init root service");
-        }
-        return bean;
-    }
 }
