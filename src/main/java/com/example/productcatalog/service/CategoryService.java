@@ -7,10 +7,10 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @CustomAnnotation
@@ -19,6 +19,8 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     private final ProductService productService;
+
+    public static final AtomicInteger POST_PROXY_INVOKE_COUNT = new AtomicInteger(0);
 
     @Autowired
     public CategoryService(CategoryRepository categoryRepository, ProductService productService) {
@@ -53,7 +55,9 @@ public class CategoryService {
         categoryRepository.deleteById(categoryId);
     }
 
+    @PostProxy
     public List<Category> getAllCategories() {
+        POST_PROXY_INVOKE_COUNT.incrementAndGet();
         return categoryRepository.findAll();
     }
 
