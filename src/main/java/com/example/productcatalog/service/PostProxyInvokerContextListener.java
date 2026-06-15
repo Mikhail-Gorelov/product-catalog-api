@@ -14,7 +14,6 @@ import java.lang.reflect.Method;
 @Slf4j
 @Component
 public class PostProxyInvokerContextListener implements ApplicationListener<ContextRefreshedEvent> {
-    @Autowired
     private final ConfigurableListableBeanFactory factory;
 
     public PostProxyInvokerContextListener(ConfigurableListableBeanFactory factory) {
