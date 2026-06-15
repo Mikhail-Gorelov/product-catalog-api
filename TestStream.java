@@ -203,11 +203,7 @@ class TestStream {
      */
     private static Map<String, List<String>> task4(List<Book> books) {
         //todo написать реализацию
-        Map<String, List<String>> result = new HashMap<>();
-        books.stream().filter(b -> b.getReviews().size() > 0).forEach(book -> {
-            result.put(book.getTitle(), book.getReviews());
-        });
-        return result;
+        return books.stream().filter(b -> b.getReviews().size() > 0).collect(Collectors.toMap(b -> b.getTitle(), b -> b.getReviews()));
     }
 
     /**
@@ -228,9 +224,10 @@ class TestStream {
      * @return среднюю стоимость книги
      */
     private static double task6(List<Book> books) {
-
         //todo написать реализацию
-        return books.stream().mapToDouble(b -> b.getPrice()).average().orElse(0);
+        return books.stream().mapToDouble(b -> b.getPrice()).average().orElseThrow(() ->
+                new IllegalStateException("Cannot calculate average price without books")
+        );
     }
 
     /**
@@ -252,11 +249,7 @@ class TestStream {
      */
     private static Set<String> task8(List<Book> books) {
         //todo написать реализацию
-        Set<String> result = new HashSet<>();
-        books.stream().limit(3).forEach(book -> {
-            result.add(book.getTitle());
-        });
-        return result;
+        return books.stream().limit(3).map(Book::getTitle).collect(Collectors.toSet());
     }
 
     /**
