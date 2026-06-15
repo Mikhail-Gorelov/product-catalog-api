@@ -2,7 +2,6 @@ package com.example.productcatalog.controller;
 
 import com.example.productcatalog.entity.Category;
 import com.example.productcatalog.service.CategoryService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

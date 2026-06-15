@@ -7,6 +7,8 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,7 +22,7 @@ public class CategoryService {
 
     private final ProductService productService;
 
-    public static final AtomicInteger POST_PROXY_INVOKE_COUNT = new AtomicInteger(0);
+    public final AtomicInteger postProxyInvokeCount = new AtomicInteger(0);
 
     @Autowired
     public CategoryService(CategoryRepository categoryRepository, ProductService productService) {
@@ -55,10 +57,17 @@ public class CategoryService {
         categoryRepository.deleteById(categoryId);
     }
 
-    @PostProxy
     public List<Category> getAllCategories() {
-        POST_PROXY_INVOKE_COUNT.incrementAndGet();
         return categoryRepository.findAll();
+    }
+
+    @EventListener
+    public void onApplicationReady(ApplicationReadyEvent event) {
+        postProxyInvokeCount.incrementAndGet();
+    }
+
+    public int getPostProxyInvokeCount() {
+        return postProxyInvokeCount.get();
     }
 
 

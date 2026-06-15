@@ -2,15 +2,19 @@ package com.example.productcatalog;
 
 import com.example.productcatalog.service.CategoryService;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class PostProxyIntegrationTest {
+    @Autowired
+    private CategoryService categoryService;
+
+
     @Test
     void postProxyInvoked() {
-        assertTrue(CategoryService.POST_PROXY_INVOKE_COUNT.get() > 0);
+        assertTrue(categoryService.getPostProxyInvokeCount() > 0);
     }
 }
