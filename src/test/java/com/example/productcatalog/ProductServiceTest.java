@@ -106,11 +106,12 @@ class ProductServiceTest {
 
     @Test
     void testSearchProducts() {
+        UUID categoryId = testCategory.getId();
         List<Product> products = List.of(testProduct);
-        when(productRepository.findByFilters(testCategory.getId(), "Laptop", 500.0, 1500.0))
+        when(productRepository.findByFilters(categoryId, "Laptop", 500.0, 1500.0))
                 .thenReturn(products);
 
-        List<Product> result = productService.searchProducts(testCategory, "Laptop", 500.0, 1500.0);
+        List<Product> result = productService.searchProducts(categoryId, "Laptop", 500.0, 1500.0);
 
         assertNotNull(result);
         assertEquals(1, result.size());

@@ -38,8 +38,8 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public List<Product> searchProducts(Category category, String name, Double minPrice, Double maxPrice) {
-        return productRepository.findByFilters(category.getId(), name, minPrice, maxPrice);
+    public List<Product> searchProducts(UUID categoryId, String name, Double minPrice, Double maxPrice) {
+        return productRepository.findByFilters(categoryId, name, minPrice, maxPrice);
     }
 
    public List<Product> findAllByIdAndCategory(Category category) {

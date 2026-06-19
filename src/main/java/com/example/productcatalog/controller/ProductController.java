@@ -40,11 +40,11 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<Product>> searchProducts(
-            @RequestParam(required = false) Category category,
+            @RequestParam(required = false) UUID categoryId,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Double minPrice,
             @RequestParam(required = false) Double maxPrice) {
-        List<Product> products = productService.searchProducts(category, name, minPrice, maxPrice);
+        List<Product> products = productService.searchProducts(categoryId, name, minPrice, maxPrice);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 }
