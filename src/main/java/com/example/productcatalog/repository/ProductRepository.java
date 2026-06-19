@@ -18,8 +18,8 @@ public interface ProductRepository extends JpaRepository<Product,UUID> {
     List<Product> findByFilters(
             @Param("categoryId") UUID categoryId,
             @Param("name") String name,
-            @Param("minPrice") double minPrice,
-            @Param("maxPrice") double maxPrice
+            @Param("minPrice") Double minPrice,
+            @Param("maxPrice") Double maxPrice
     );
 
     List<Product> findAllByCategory(Category category);
