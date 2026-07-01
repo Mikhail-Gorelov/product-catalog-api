@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,30 +23,29 @@ public class ProductController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-        Product createdProduct = productService.createProduct(product);
-        return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
+    public Mono<ResponseEntity<Product>> createProduct(@RequestBody Product product) {
+        return productService.createProduct(product)
+                .map(p -> new ResponseEntity<>(p, HttpStatus.CREATED));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable UUID id) {
-        productService.deleteProduct(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public Mono<ResponseEntity<Void>> deleteProduct(@PathVariable UUID id) {
+        return productService.deleteProduct(id)
+                .thenReturn(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable UUID id, @RequestBody Product updatedProduct) {
-        Product product = productService.updateProduct(id, updatedProduct);
-        return new ResponseEntity<>(product, HttpStatus.OK);
+    public Mono<ResponseEntity<Product>> updateProduct(@PathVariable UUID id, @RequestBody Product updatedProduct) {
+        return productService.updateProduct(id, updatedProduct)
+                .map(p -> new ResponseEntity<>(p, HttpStatus.OK));
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> searchProducts(
+    public Flux<Product> searchProducts(
             @RequestParam(required = false) UUID categoryId,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Double minPrice,
             @RequestParam(required = false) Double maxPrice) {
-        List<Product> products = productService.searchProducts(categoryId, name, minPrice, maxPrice);
-        return new ResponseEntity<>(products, HttpStatus.OK);
+        return productService.searchProducts(categoryId, name, minPrice, maxPrice);
     }
 }

@@ -1,23 +1,20 @@
 package com.example.productcatalog.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import org.springframework.data.annotation.Id;
 import lombok.*;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.UUID;
 
-@Entity
+@Table("category")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Category {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private final UUID id = UUID.randomUUID();
+    private UUID id;
     private String name;
     private String description;
 }

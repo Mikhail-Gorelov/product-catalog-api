@@ -1,29 +1,28 @@
 package com.example.productcatalog.entity;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.annotation.Id;
 import lombok.*;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
-@Entity
+@Table("product")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private final UUID id = UUID.randomUUID();
+    private UUID id;
     private String name;
     private String description;
     private Double price;
     private String image;
 
-    @NotNull
-    @ManyToOne(optional = false)
-    private Category category;
+    @Column("category_id")
+    private UUID categoryId;
     private LocalDate dateAdded;
     @Builder.Default
     private boolean active = Boolean.FALSE;

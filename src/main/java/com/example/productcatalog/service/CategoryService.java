@@ -1,7 +1,6 @@
 package com.example.productcatalog.service;
 
 import com.example.productcatalog.entity.Category;
-import com.example.productcatalog.entity.Product;
 import com.example.productcatalog.repository.CategoryRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -9,8 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -41,23 +41,15 @@ public class CategoryService {
         log.info("destroy");
     }
 
-    public Category createCategory(Category category) {
+    public Mono<Category> createCategory(Category category) {
         return categoryRepository.save(category);
     }
 
-    public void deleteCategory(UUID categoryId) {
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
-        List<Product> products = productService.findAllByIdAndCategory(category);
-        for (Product product : products) {
-            product.setActive(true);
-            product.setCategory(null);
-            productService.createProduct(product);
-        }
-        categoryRepository.deleteById(categoryId);
+    public Mono<Void> deleteCategory(UUID categoryId) {
+        return categoryRepository.deleteById(categoryId);
     }
 
-    public List<Category> getAllCategories() {
+    public Flux<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
 
@@ -71,15 +63,17 @@ public class CategoryService {
     }
 
 
-    public Category updateCategory(UUID categoryId, Category updatedCategory) {
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
-        category.setName(updatedCategory.getName());
-        category.setDescription(updatedCategory.getDescription());
-        return categoryRepository.save(category);
+    public Mono<Category> updateCategory(UUID categoryId, Category updatedCategory) {
+        return categoryRepository.findById(categoryId)
+                .flatMap(category -> {
+                    category.setName(updatedCategory.getName());
+                    category.setDescription(updatedCategory.getDescription());
+                    return categoryRepository.save(category);
+                })
+                .switchIfEmpty(Mono.error(new RuntimeException("Category not found")));
     }
 
-    public Category getCategoryName(String name) {
+    public Mono<Category> getCategoryName(String name) {
         return categoryRepository.getCategoryByName(name);
     }
 }
