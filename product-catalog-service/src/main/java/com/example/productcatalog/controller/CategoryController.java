@@ -1,11 +1,13 @@
 package com.example.productcatalog.controller;
 
+import com.example.productcatalog.api.CategoryDto;
 import com.example.productcatalog.entity.Category;
 import com.example.productcatalog.service.CategoryService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,9 +23,8 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
-        Category createdCategory = categoryService.createCategory(category);
-        return new ResponseEntity<>(createdCategory, HttpStatus.CREATED);
+    public Mono<CategoryDto> createCategory(@RequestBody CategoryDto category) {
+        return categoryService.createCategory(category);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

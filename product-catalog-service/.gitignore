@@ -10,7 +10,7 @@ bin/
 
 
 # Intellij Idea
-.idea
+../../.idea
 out/
 **/src/main/**/out/
 **/src/test/**/out/

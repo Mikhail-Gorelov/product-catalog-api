@@ -1,6 +1,5 @@
 package com.example.productcatalog.controller;
 
-import com.example.productcatalog.entity.Category;
 import com.example.productcatalog.entity.Product;
 import com.example.productcatalog.service.CategoryService;
 import com.example.productcatalog.service.ProductService;
