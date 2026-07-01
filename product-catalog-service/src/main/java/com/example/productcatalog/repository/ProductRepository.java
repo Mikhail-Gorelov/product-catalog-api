@@ -5,11 +5,12 @@ import com.example.productcatalog.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 
 import java.util.List;
 import java.util.UUID;
 
-public interface ProductRepository extends JpaRepository<Product,UUID> {
+public interface ProductRepository extends ReactiveCrudRepository<Product,UUID> {
 
     @Query("SELECT p FROM Product p WHERE (:categoryId IS NULL OR p.category.id = :categoryId) " +
             "AND (:name IS NULL OR p.name LIKE %:name%) " +

@@ -68,7 +68,8 @@ public class CategoryService extends ReactorCategoryServiceGrpc.CategoryServiceI
 
     @Override
     public Flux<CategoryDto> getAllCategories(reactor.core.publisher.Mono<com.google.protobuf.Empty> request) {
-        return categoryRepository.findAll();
+        return categoryRepository.findAll()
+                .map(mapper::toDto);
     }
 
     @EventListener
