@@ -1,5 +1,8 @@
 package org.example;
 
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 /**
  * This generic class represents how to work calculator
  *
@@ -43,21 +46,27 @@ class Calculator<T extends Number> {
      * The method creates a new instance of the calculator with a specified initial value.
      */
     public static <T extends Number> Calculator<T> of(T value) {
-        value = value;
+        return value == null ? getBrokenCalculator() : new Calculator<>(value);
     }
 
     /**
      * The method applies a given function to the value stored in the calculator. It never throws ArithmeticException or
      * NullPointerException
      */
-    public <U extends Number> Calculator<U> eval(Object o) {
-
+    public <U extends Number> Calculator<U> eval(Function<? super T, ? extends U> f) {
+        try {
+            return Calculator.of(f.apply(value));
+        } catch (ArithmeticException | NullPointerException e) {
+            return getBrokenCalculator();
+        }
     }
 
     /**
      * The method passes the stored value to a given consumer only if no errors have occurred in the calculator.
      */
-    public Calculator<T> consume(Object o) {
+    public Calculator<T> consume(Consumer<T> consumer) {
+        if (!hasError) consumer.accept(value);
+        return Calculator.of(value);
     }
 
     /**
