@@ -63,14 +63,13 @@ public class CategoryService {
     }
 
 
-    public Mono<Category> updateCategory(UUID categoryId, Category updatedCategory) {
+    public Category updateCategory(UUID categoryId, Category updatedCategory) {
         return categoryRepository.findById(categoryId)
                 .flatMap(category -> {
                     category.setName(updatedCategory.getName());
                     category.setDescription(updatedCategory.getDescription());
                     return categoryRepository.save(category);
-                })
-                .switchIfEmpty(Mono.error(new RuntimeException("Category not found")));
+                }).block();
     }
 
     public Mono<Category> getCategoryName(String name) {

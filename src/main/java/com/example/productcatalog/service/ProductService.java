@@ -41,11 +41,13 @@ public class ProductService {
     }
 
     public Flux<Product> searchProducts(UUID categoryId, String name, Double minPrice, Double maxPrice) {
-        return productRepository.findByFilters(categoryId, name, minPrice, maxPrice);
+        return Flux.fromIterable(
+                productRepository.findByFilters(categoryId, name, minPrice, maxPrice)
+        );
     }
 
    public Flux<Product> findAllByIdAndCategory(Category category) {
-        return productRepository.findAllByCategoryId(category.getId());
+        return Flux.fromIterable(productRepository.findAllByCategoryId(category.getId()));
    }
 
 

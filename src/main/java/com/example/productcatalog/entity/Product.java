@@ -1,9 +1,9 @@
 package com.example.productcatalog.entity;
 
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.annotation.Id;
-import lombok.*;
 import org.springframework.data.relational.core.mapping.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -15,14 +15,16 @@ import java.util.UUID;
 @Builder
 public class Product {
     @Id
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id = UUID.randomUUID();
     private String name;
     private String description;
     private Double price;
     private String image;
 
-    @Column("category_id")
-    private UUID categoryId;
+    @NotNull
+    @ManyToOne(optional = false)
+    private Category category;
     private LocalDate dateAdded;
     @Builder.Default
     private boolean active = Boolean.FALSE;

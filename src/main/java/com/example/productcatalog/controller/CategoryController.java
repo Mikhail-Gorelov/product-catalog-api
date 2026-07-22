@@ -1,7 +1,6 @@
 package com.example.productcatalog.controller;
 
 import com.example.productcatalog.entity.Category;
-import com.example.productcatalog.entity.Product;
 import com.example.productcatalog.service.CategoryService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -41,8 +40,8 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public Mono<ResponseEntity<Category>> updateCategory(@PathVariable UUID id, @RequestBody Category updatedCategory) {
-        return categoryService.updateCategory(id, updatedCategory)
-                .map(updated -> new ResponseEntity<>(updated, HttpStatus.OK));
+    public ResponseEntity<Category> updateCategory(@PathVariable UUID id, @RequestBody Category updatedCategory) {
+        categoryService.updateCategory(id, updatedCategory);
+        return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
     }
 }
