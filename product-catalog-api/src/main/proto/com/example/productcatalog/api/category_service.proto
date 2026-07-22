@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option java_package = "com.example.productcatalog.api";
+option java_outer_classname = "CategoryServiceApi";
+option java_multiple_files = true;
+
+service CategoryService {
+  rpc createCategory (CategoryDto) returns (CategoryDto);
+  rpc deleteCategory (CategoryDto) returns (google.protobuf.Empty);
+  rpc getAllCategories (google.protobuf.Empty) returns (stream CategoryDto);
+}
+
+message CategoryDto {
+    RequestId request_id = 1;
+    string name = 2;
+    string description = 3;
+}
+
+message RequestId {
+  string trace_id = 1;
+  string client_id = 2;
+}

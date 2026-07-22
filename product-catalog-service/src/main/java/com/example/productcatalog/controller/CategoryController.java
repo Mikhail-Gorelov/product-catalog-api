@@ -1,0 +1,47 @@
+package com.example.productcatalog.controller;
+
+import com.example.productcatalog.api.CategoryDto;
+import com.example.productcatalog.entity.Category;
+import com.example.productcatalog.service.CategoryService;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/categories")
+public class CategoryController {
+
+    private final CategoryService categoryService;
+
+    public CategoryController(@Qualifier("categoryService") CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
+
+    @PostMapping
+    public Mono<CategoryDto> createCategory(@RequestBody CategoryDto category) {
+        return categoryService.createCategory(category);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public void deleteCategory(@PathVariable UUID id) {
+        categoryService.deleteCategory(id);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Category>> getAllCategories() {
+        List<Category> categories = categoryService.getAllCategories();
+        return new ResponseEntity<>(categories, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Category> updateCategory(@PathVariable UUID id, @RequestBody Category updatedCategory) {
+        Category category = categoryService.updateCategory(id, updatedCategory);
+        return new ResponseEntity<>(category, HttpStatus.OK);
+    }
+}
