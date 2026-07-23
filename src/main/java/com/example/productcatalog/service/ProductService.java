@@ -4,6 +4,8 @@ import com.example.productcatalog.entity.Category;
 import com.example.productcatalog.entity.Product;
 import com.example.productcatalog.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -16,6 +18,8 @@ import java.util.UUID;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    @Autowired
+    DatabaseClient db;
 
     public Mono<Product> createProduct(Product product) {
         return productRepository.save(product);
@@ -25,6 +29,7 @@ public class ProductService {
         return productRepository.deleteById(productId);
     }
 
+
     public Mono<Product> updateProduct(UUID productId, Product updatedProduct) {
         return productRepository.findById(productId)
                 .flatMap(product -> {
@@ -32,22 +37,22 @@ public class ProductService {
                     product.setDescription(updatedProduct.getDescription());
                     product.setPrice(updatedProduct.getPrice());
                     product.setImage(updatedProduct.getImage());
-                    product.setDateAdded(updatedProduct.getDateAdded());
+                    product.setCategoryId(updatedProduct.getCategoryId());
+                    if (updatedProduct.getDateAdded() != null) {
+                        product.setDateAdded(updatedProduct.getDateAdded());
+                    }
                     product.setActive(updatedProduct.isActive());
-
                     return productRepository.save(product);
                 })
                 .switchIfEmpty(Mono.error(new RuntimeException("Product not found")));
     }
 
     public Flux<Product> searchProducts(UUID categoryId, String name, Double minPrice, Double maxPrice) {
-        return Flux.fromIterable(
-                productRepository.findByFilters(categoryId, name, minPrice, maxPrice)
-        );
+        return productRepository.findByFilters(categoryId, name, minPrice, maxPrice);
     }
 
    public Flux<Product> findAllByIdAndCategory(Category category) {
-        return Flux.fromIterable(productRepository.findAllByCategoryId(category.getId()));
+        return productRepository.findAllByCategoryId(category.getId());
    }
 
 

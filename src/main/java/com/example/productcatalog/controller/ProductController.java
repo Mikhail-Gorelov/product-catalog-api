@@ -1,6 +1,5 @@
 package com.example.productcatalog.controller;
 
-import com.example.productcatalog.entity.Category;
 import com.example.productcatalog.entity.Product;
 import com.example.productcatalog.service.CategoryService;
 import com.example.productcatalog.service.ProductService;
@@ -11,13 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
-public class ProductController {
+public class  ProductController {
 
     private final ProductService productService;
     private final CategoryService categoryService;

@@ -12,16 +12,16 @@ import java.util.UUID;
 
 public interface ProductRepository extends ReactiveCrudRepository<Product,UUID> {
 
-    @Query("SELECT p FROM Product p WHERE (:categoryId IS NULL OR p.category.id = :categoryId) " +
-            "AND (:name IS NULL OR p.name ILIKE CONCAT('%', :name, '%')) " +
-            "AND (:minPrice IS NULL OR p.price >= :minPrice) " +
-            "AND (:maxPrice IS NULL OR p.price <= :maxPrice) ")
-    List<Product> findByFilters(
+    @Query("SELECT * FROM Product WHERE (:categoryId::uuid IS NULL OR category_id = :categoryId::uuid) " +
+            "AND (:name IS NULL OR name ILIKE '%' || COALESCE(:name, '') || '%') " +
+            "AND (:minPrice IS NULL OR price >= :minPrice) " +
+            "AND (:maxPrice IS NULL OR price <= :maxPrice) ")
+    Flux<Product> findByFilters(
             @Param("categoryId") UUID categoryId,
             @Param("name") String name,
             @Param("minPrice") Double minPrice,
             @Param("maxPrice") Double maxPrice
     );
 
-    List<Product> findAllByCategoryId(UUID categoryId);
+    Flux<Product> findAllByCategoryId(UUID categoryId);
 }
