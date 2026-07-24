@@ -2,6 +2,8 @@ package com.example.productcatalog.service;
 
 import com.example.productcatalog.entity.Category;
 import com.example.productcatalog.repository.CategoryRepository;
+import com.example.productcatalog.api.ReactorCategoryServiceGrpc;
+import io.grpc.BindableService;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @CustomAnnotation
-public class CategoryService {
+public class CategoryService extends ReactorCategoryServiceGrpc.CategoryServiceImplBase implements BindableService {
 
     private final CategoryRepository categoryRepository;
 
