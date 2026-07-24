@@ -10,6 +10,10 @@ version = '0.0.1-SNAPSHOT'
 java {
      sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
+    
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 repositories {
@@ -17,6 +21,8 @@ repositories {
 }
 
 dependencies {
+    implementation project(':product-catalog-api')
+
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -33,10 +39,14 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.0.2'
     implementation 'io.swagger.core.v3:swagger-annotations:2.1.6'
 
+    implementation 'io.grpc:grpc-stub:1.63.0'
+    implementation 'io.grpc:grpc-protobuf:1.63.0'
+    implementation 'com.salesforce.servicelibs:reactor-grpc-stub:1.2.4'
+
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-    compileOnly 'org.projectlombok:lombok:1.18.36'
-    annotationProcessor 'org.projectlombok:lombok:1.18.36'
+    compileOnly 'org.projectlombok:lombok:1.18.32'
+    annotationProcessor 'org.projectlombok:lombok:1.18.32'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
