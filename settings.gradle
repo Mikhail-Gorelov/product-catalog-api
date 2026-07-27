@@ -1,0 +1,7 @@
+pluginManagement {
+
+}
+
+rootProject.name = 'product-catalog'
+include "product-catalog-service"
+include "product-catalog-api"
